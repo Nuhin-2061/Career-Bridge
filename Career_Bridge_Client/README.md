@@ -1,4 +1,11 @@
-# React + Vite
+# Career Bridge Client
+
+## Environment
+
+- Copy `.env.example` to `.env.local` and fill in the values.
+- Never commit `.env.local` or build output.
+
+## React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 

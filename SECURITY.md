@@ -2,20 +2,20 @@
 
 ## Supported Versions
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
-
-| Version | Supported          |
-| ------- | ------------------ |
-| 5.1.x   | :white_check_mark: |
-| 5.0.x   | :x:                |
-| 4.0.x   | :white_check_mark: |
-| < 4.0   | :x:                |
+This project does not maintain multiple supported release lines. Use the latest version from the default branch.
 
 ## Reporting a Vulnerability
 
-Use this section to tell people how to report a vulnerability.
+Please do not open a public issue. Contact the project owner privately with:
 
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+- Steps to reproduce
+- Affected components
+- Impact assessment
+
+We aim to acknowledge reports within 7 days.
+
+## Secrets Management
+
+- Do not commit `.env*` files or build output.
+- Rotate any leaked secret immediately.
+- Store runtime secrets in environment variables only.
