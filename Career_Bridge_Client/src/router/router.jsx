@@ -70,7 +70,7 @@ const router = createBrowserRouter([
         ]
     },
 ], {
-    basename: '/Career-Bridge_/'
+    basename: '/Career-Bridge/'
 });
 
 export default router;
