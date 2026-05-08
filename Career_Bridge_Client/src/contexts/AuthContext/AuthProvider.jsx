@@ -1,55 +1,67 @@
 import { useEffect, useState } from "react";
-import { AuthContext } from "./AuthContext";
-import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
-import { auth } from "../../firebase/firebase.init";
 import axios from "axios";
-
-const googleProvider = new GoogleAuthProvider();
+import { AuthContext } from "./AuthContext";
+import { supabase } from "../../lib/supabaseClient";
+import { API_BASE_URL } from "../../api/apiBase";
 
 const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [user, setUser] = useState(null);
 
-    const createUser = (email, password) => {
+    const createUser = async (email, password) => {
         setLoading(true);
-        return createUserWithEmailAndPassword(auth, email, password);
-    }
+        const { data, error } = await supabase.auth.signUp({ email, password });
+        if (error) {
+            throw error;
+        }
+        return { user: data.user };
+    };
 
-    const signInUser = (email, password) => {
+    const signInUser = async (email, password) => {
         setLoading(true);
-        return signInWithEmailAndPassword(auth, email, password);
-    }
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) {
+            throw error;
+        }
+        return { user: data.user };
+    };
 
-    const signInWithGoogle = () => {
+    const signInWithGoogle = async () => {
         setLoading(true);
-        return signInWithPopup(auth, googleProvider);
-    }
+        const { data, error } = await supabase.auth.signInWithOAuth({ provider: "google" });
+        if (error) {
+            throw error;
+        }
+        return data;
+    };
 
     useEffect(() => {
-        const unSubscribe = onAuthStateChanged(auth, currentUser => {
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+            const currentUser = session?.user || null;
             setUser(currentUser);
             setLoading(false);
+
             if (currentUser?.email) {
                 const userData = { email: currentUser.email };
-                axios.post('https://career-bridge-server-pink.vercel.app/jwt', userData, {
+                axios.post(`${API_BASE_URL}/jwt`, userData, {
                     withCredentials: true
                 })
-                    .then(res => {
-                        console.log(res.data)
-                    })
-                    .catch(error => console.log(error))
+                    .catch(error => console.log(error));
             }
-            console.log('Auth state changed:', currentUser);
-        })
-        return () => {
-            unSubscribe();
-        }
-    }, [])
+        });
 
-    const signOutUser = () => {
+        return () => {
+            subscription.unsubscribe();
+        };
+    }, []);
+
+    const signOutUser = async () => {
         setLoading(true);
-        return signOut(auth);
-    }
+        const { error } = await supabase.auth.signOut();
+        if (error) {
+            throw error;
+        }
+    };
 
     const authInfo = {
         loading,
@@ -61,11 +73,9 @@ const AuthProvider = ({ children }) => {
     }
 
     return (
-        <AuthContext value={authInfo}>
-            {
-                children
-            }
-        </AuthContext>
+        <AuthContext.Provider value={authInfo}>
+            {children}
+        </AuthContext.Provider>
     );
 };
 

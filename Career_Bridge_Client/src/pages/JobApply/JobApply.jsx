@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router";
 import UseAuth from "../../hooks/UseAuth";
 import axios from "axios";
 import Swal from "sweetalert2";
+import { API_BASE_URL } from "../../api/apiBase";
 
 
 const JobApply = () => {
@@ -45,7 +46,7 @@ const JobApply = () => {
         }
 
 
-        axios.post('https://career-bridge-server-pink.vercel.app/applications', application)
+        axios.post(`${API_BASE_URL}/applications`, application)
             .then(res => {
                 console.log(res.data)
                 if (res.data.insertedId) {

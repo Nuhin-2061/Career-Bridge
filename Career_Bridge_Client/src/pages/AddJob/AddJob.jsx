@@ -2,6 +2,7 @@
 import axios from "axios";
 import UseAuth from "../../hooks/UseAuth";
 import Swal from "sweetalert2";
+import { API_BASE_URL } from "../../api/apiBase";
 
 
 const AddJob = () => {
@@ -42,6 +43,8 @@ const AddJob = () => {
             }
         }
 
+        const { min, max, currency, ...newJob } = data;
+
         // salary validation
         if (!min || !max || !currency) {
             Swal.fire({
@@ -51,9 +54,7 @@ const AddJob = () => {
             return;
         }
 
-
         // process salary range data
-        const { min, max, currency, ...newJob } = data;
         newJob.salaryRange = { min, max, currency };
 
         // process requirements
@@ -70,7 +71,7 @@ const AddJob = () => {
 
 
         // save data to db
-        axios.post('https://career-bridge-server-pink.vercel.app/jobs', newJob)
+        axios.post(`${API_BASE_URL}/jobs`, newJob)
             .then(res => {
                 if (res.data.insertedId) {
                     Swal.fire({

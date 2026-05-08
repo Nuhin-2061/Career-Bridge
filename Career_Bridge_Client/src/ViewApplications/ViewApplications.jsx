@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useLoaderData, useParams } from "react-router";
 import Swal from "sweetalert2";
+import { API_BASE_URL } from "../api/apiBase";
 
 
 const ViewApplications = () => {
@@ -9,7 +10,7 @@ const ViewApplications = () => {
 
 
     const handleStatusChange = (e, app_id) => {
-        axios.patch(`https://career-bridge-server-pink.vercel.app/applications/${app_id}`, { status: e.target.value })
+        axios.patch(`${API_BASE_URL}/applications/${app_id}`, { status: e.target.value })
             .then(res => {
                 if (res.data.modifiedCount) {
                     Swal.fire({

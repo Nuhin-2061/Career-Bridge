@@ -5,22 +5,28 @@ import HotJobs from './HotJobs';
 import Loader from '../Shared/Loader';
 import JobsOfTheDay from './JobsOfTheDay';
 import SubscribeSection from './SubscribeSection';
+import { API_BASE_URL } from '../../api/apiBase';
+import { demoJobs } from '../../data/demoJobs';
 
 const Home = () => {
     const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
 
     useEffect(() => {
-        fetch('https://career-bridge-server-pink.vercel.app/jobs')
-            .then(res => res.json())
+        fetch(`${API_BASE_URL}/jobs`)
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Failed to load jobs');
+                }
+                return res.json();
+            })
             .then(data => {
-                setJobs(data);
+                setJobs(Array.isArray(data) && data.length ? data : demoJobs);
                 setLoading(false);
             })
             .catch(err => {
                 console.error(err);
-                setError(true);
+                setJobs(demoJobs);
                 setLoading(false);
             });
     }, []);
@@ -33,14 +39,8 @@ const Home = () => {
 
             {loading && <Loader></Loader>}
 
-            {!loading && !error && (
+            {!loading && (
                 <HotJobs jobs={jobs} />
-            )}
-
-            {error && (
-                <p className="text-red-500 text-center my-6">
-                    Failed to load jobs. Server is not running.
-                </p>
             )}
             <SubscribeSection></SubscribeSection>
         </div>
