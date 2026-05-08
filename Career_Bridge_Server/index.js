@@ -33,7 +33,10 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
-const jwtSecret = process.env.JWT_ACCESS_SECRET || 'career-bridge-local-dev-secret';
+const jwtSecret = process.env.JWT_ACCESS_SECRET;
+if (!jwtSecret) {
+    throw new Error('Missing JWT_ACCESS_SECRET in environment');
+}
 const hasSupabaseConfig = Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
 const supabase = hasSupabaseConfig
     ? createClient(
