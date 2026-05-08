@@ -100,18 +100,11 @@ const NavBar = () => {
                 {/* Mobile Menu */}
                 {isOpen && (
                     <div className="absolute top-20 left-0 bg-black w-full flex flex-col items-center gap-4 py-6 text-base rounded-xl md:hidden">
-                        {["Products", "Customer Stories", "Pricing", "Docs"].map((item) => (
-                            <a key={item} href="#" className="hover:text-indigo-600">
-                                {item}
-                            </a>
+                        {navLinks.map((link) => (
+                            <NavLink key={link.name} to={link.href} onClick={() => setIsOpen(false)} className="hover:text-indigo-400">
+                                {link.name}
+                            </NavLink>
                         ))}
-
-                        <button className="border border-slate-600 hover:bg-slate-800 px-4 py-2 rounded-full text-sm font-medium transition">
-                            Contact
-                        </button>
-                        <button className="bg-white text-black px-4 py-2 rounded-full text-sm font-medium hover:bg-slate-100 transition duration-300">
-                            Get Started
-                        </button>
                     </div>
                 )}
             </nav>

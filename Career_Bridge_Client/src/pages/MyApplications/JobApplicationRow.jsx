@@ -1,7 +1,7 @@
 
 
 const JobApplicationRow = ({ application, index }) => {
-    const { title, company, company_logo, category, status, applicationDeadline } = application;
+    const { title, company, company_logo, category, status = "pending", applicationDeadline } = application;
     return (
         <tr>
             <td className="pl-4 w-8">
@@ -26,7 +26,7 @@ const JobApplicationRow = ({ application, index }) => {
             <td className="px-4 py-3 text-sm  font-medium">
                 <span className="inline-flex items-center border border-gray-200 gap-2 px-2 py-1 rounded-lg">
                     <span className="w-2 h-2 bg-green-600 rounded-full"></span>
-                    {status.slice(0, 1).toUpperCase() + status.slice(1, status.len)}
+                    {status.slice(0, 1).toUpperCase() + status.slice(1)}
                 </span>
             </td>
             <td className="px-4 py-3 text-sm  font-medium">

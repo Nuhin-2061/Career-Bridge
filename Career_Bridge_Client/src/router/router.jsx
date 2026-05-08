@@ -11,6 +11,9 @@ import AddJob from "../pages/AddJob/AddJob";
 import MyPostedJobs from "../pages/MyPostedJobs/MyPostedJobs";
 import ViewApplications from "../ViewApplications/ViewApplications";
 import { API_BASE_URL } from "../api/apiBase";
+import { loadApplicationsByJobId, loadJobById } from "../data/jobLoaders";
+import Pricing from "../pages/Pricing/Pricing";
+import Docs from "../pages/Docs/Docs";
 
 const router = createBrowserRouter([
     {
@@ -24,12 +27,12 @@ const router = createBrowserRouter([
             {
                 path: "/jobs/:id",
                 element: <JobDetails></JobDetails>,
-                loader: ({ params }) => fetch(`${API_BASE_URL}/jobs/${params.id}`)
+                loader: ({ params }) => loadJobById(params.id)
             },
             {
                 path: "/jobApply/:id",
                 element: <PrivateRoute><JobApply></JobApply></PrivateRoute>,
-                loader: ({ params }) => fetch(`${API_BASE_URL}/jobs/${params.id}`)
+                loader: ({ params }) => loadJobById(params.id)
             },
             {
                 path: "myapplications",
@@ -38,7 +41,7 @@ const router = createBrowserRouter([
             {
                 path: "applications/:job_id",
                 element: <PrivateRoute><ViewApplications></ViewApplications></PrivateRoute>,
-                loader: ({ params }) => fetch(`${API_BASE_URL}/applications/jobs/${params.job_id}`)
+                loader: ({ params }) => loadApplicationsByJobId(params.job_id)
             },
             {
                 path: "addjob",
@@ -55,6 +58,14 @@ const router = createBrowserRouter([
             {
                 path: "/signin",
                 element: <SignIn></SignIn>
+            },
+            {
+                path: "/pricing",
+                element: <Pricing></Pricing>
+            },
+            {
+                path: "/docs",
+                element: <Docs></Docs>
             },
         ]
     },
